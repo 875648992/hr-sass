@@ -13,9 +13,6 @@ export default {
     key() {
       return this.$route.path
     }
-  },
-  created() {
-    console.log(process.env)
   }
 }
 </script>

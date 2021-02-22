@@ -12,7 +12,6 @@ const mutations = {
 const actions = {
   async getToken({ commit }, form) {
     const res = await login(form)
-    console.log(res)
     commit('setToken', res)
   }
 }

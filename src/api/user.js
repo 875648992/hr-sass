@@ -7,7 +7,11 @@ export function login(data) {
   })
 }
 
-export function getInfo(token) {
+export function getInfo() {
+  return axios({
+    method: 'POST',
+    url: '/sys/profile'
+  })
 }
 
 export function logout() {

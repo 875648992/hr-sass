@@ -32,6 +32,11 @@ module.exports = {
   devServer: {
     port: port,
     open: true,
+    proxy: {
+      '/api': {
+        target: 'http://ihrm-java.itheima.net'
+      }
+    },
     overlay: {
       warnings: false,
       errors: true

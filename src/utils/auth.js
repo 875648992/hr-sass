@@ -1,9 +1,9 @@
 import Cookies from 'js-cookie'
 
-const TokenKey = 'vue_admin_template_token'
+const TokenKey = 'hm-hrSass-token'
 
 export function getToken() {
-  return Cookies.get(TokenKey)
+  return Cookies.get(TokenKey) || null
 }
 
 export function setToken(token) {

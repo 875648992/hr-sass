@@ -64,3 +64,8 @@ div:focus {
 .app-container {
   padding: 20px;
 }
+
+#nprogress .bar {
+      background: #fff !important; //自定义颜色
+      height: 3px !important
+    }

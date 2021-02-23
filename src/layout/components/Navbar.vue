@@ -8,7 +8,7 @@
     <!-- <breadcrumb class="breadcrumb-container" /> -->
 
     <div class="right-menu">
-      <el-dropdown class="avatar-container" trigger="click">
+      <el-dropdown class="avatar-container" trigger="hover">
         <div class="avatar-wrapper">
           <img :src="photo" class="user-avatar">
           <span class="name">{{ name }}</span>
@@ -20,15 +20,29 @@
               首页
             </el-dropdown-item>
           </router-link>
-          <a target="_blank" href="https://gitee.com/shuiruohanyu/hrsaas53">
+          <a target="_blank" href="https://github.com/875648992/hr-sass">
             <el-dropdown-item>项目地址</el-dropdown-item>
           </a>
-          <el-dropdown-item divided @click.native="logout">
+          <el-dropdown-item divided @click.native="dialogVisible = true">
             <span style="display:block;">退出登录</span>
           </el-dropdown-item>
         </el-dropdown-menu>
       </el-dropdown>
     </div>
+    <el-dialog
+      title="提示"
+      :visible.sync="dialogVisible"
+      width="30%"
+    >
+      <span class="warningSpan">
+        <i class="el-icon-warning" />
+        请问是否退出?
+      </span>
+      <span slot="footer" class="dialog-footer">
+        <el-button @click="dialogVisible = false">取 消</el-button>
+        <el-button type="primary" @click="logout">确 定</el-button>
+      </span>
+    </el-dialog>
   </div>
 </template>
 
@@ -42,6 +56,11 @@ export default {
     // Breadcrumb,
     Hamburger
   },
+  data() {
+    return {
+      dialogVisible: false
+    }
+  },
   computed: {
     ...mapGetters([
       'sidebar',
@@ -54,9 +73,10 @@ export default {
     toggleSideBar() {
       this.$store.dispatch('app/toggleSideBar')
     },
-    async logout() {
-      await this.$store.dispatch('user/logout')
-      this.$router.push(`/login?redirect=${this.$route.fullPath}`)
+    logout() {
+      this.$store.dispatch('user/logout')
+      this.$router.push('/login')
+      this.$message.success('退出成功   请重新登录')
     }
   }
 }
@@ -138,12 +158,16 @@ export default {
 
       .avatar-wrapper {
         position: relative;
+        span{
+              cursor: pointer;
+            }
 
         .user-avatar {
           cursor: pointer;
-          width: 40px;
-          height: 40px;
-          border-radius: 20px;
+          width: 30px;
+          height: 30px;
+          border-radius: 15px;
+          margin-right: 5px;
         }
 
         .el-icon-caret-bottom {
@@ -173,5 +197,14 @@ export default {
       color: #fff;
       position: relative;
       margin-top: -5px;
+    }
+    .el-icon-warning{
+      font-size: 20px;
+      vertical-align: middle;
+      color: skyblue;
+    }
+    .warningSpan{
+      font-size: 16px;
+      vertical-align: middle;
     }
 </style>

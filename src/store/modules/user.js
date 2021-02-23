@@ -1,5 +1,5 @@
 import { login, getInfo, staff } from '@/api/user'
-import { getToken, setToken } from '@/utils/auth'
+import { getToken, setToken, removeToken } from '@/utils/auth'
 const state = {
   token: getToken(),
   userInfo: {}
@@ -11,6 +11,13 @@ const mutations = {
   },
   setUserInfo(state, payload) {
     state.userInfo = payload
+  },
+  isRemoveToken() {
+    removeToken()
+  },
+  removeUserInfo(state) {
+    state.token = ''
+    state.userInfo = ''
   }
 }
 const actions = {
@@ -21,11 +28,14 @@ const actions = {
   async getUserInfo({ commit }) {
     const res = await getInfo()
     const res2 = await staff(res.userId)
-    console.log(res)
     commit('setUserInfo', {
       ...res,
       staffPhoto: res2.staffPhoto
     })
+  },
+  logout({ commit }) {
+    commit('isRemoveToken')
+    commit('removeUserInfo')
   }
 }
 

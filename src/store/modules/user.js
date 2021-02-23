@@ -1,4 +1,4 @@
-import { login, getInfo } from '@/api/user'
+import { login, getInfo, staff } from '@/api/user'
 import { getToken, setToken } from '@/utils/auth'
 const state = {
   token: getToken(),
@@ -20,7 +20,12 @@ const actions = {
   },
   async getUserInfo({ commit }) {
     const res = await getInfo()
-    commit('setUserInfo', res)
+    const res2 = await staff(res.userId)
+    console.log(res)
+    commit('setUserInfo', {
+      ...res,
+      staffPhoto: res2.staffPhoto
+    })
   }
 }
 

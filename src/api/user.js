@@ -14,5 +14,12 @@ export function getInfo() {
   })
 }
 
+export function staff(id) {
+  return axios({
+    method: 'get',
+    url: '/sys/user/' + id
+  })
+}
+
 export function logout() {
 }

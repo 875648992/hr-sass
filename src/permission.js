@@ -7,6 +7,7 @@ const whiteList = ['/login', '/404']
 router.beforeEach((to, form, next) => {
   const token = store.getters.token
   NProgress.start()
+  store.dispatch('user/getUserInfo')
   if (token) {
     if (to.path === '/login') {
       next('/')

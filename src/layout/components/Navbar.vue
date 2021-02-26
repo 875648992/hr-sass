@@ -10,7 +10,7 @@
     <div class="right-menu">
       <el-dropdown class="avatar-container" trigger="hover">
         <div class="avatar-wrapper">
-          <img :src="photo" class="user-avatar">
+          <img v-errorImg="errImg" :src="photo" class="user-avatar">
           <span class="name">{{ name }}</span>
           <i class="el-icon-caret-bottom user-dropdown" />
         </div>
@@ -23,26 +23,12 @@
           <a target="_blank" href="https://github.com/875648992/hr-sass">
             <el-dropdown-item>项目地址</el-dropdown-item>
           </a>
-          <el-dropdown-item divided @click.native="dialogVisible = true">
+          <el-dropdown-item divided @click.native="logout">
             <span style="display:block;">退出登录</span>
           </el-dropdown-item>
         </el-dropdown-menu>
       </el-dropdown>
     </div>
-    <el-dialog
-      title="提示"
-      :visible.sync="dialogVisible"
-      width="30%"
-    >
-      <span class="warningSpan">
-        <i class="el-icon-warning" />
-        请问是否退出?
-      </span>
-      <span slot="footer" class="dialog-footer">
-        <el-button @click="dialogVisible = false">取 消</el-button>
-        <el-button type="primary" @click="logout">确 定</el-button>
-      </span>
-    </el-dialog>
   </div>
 </template>
 
@@ -58,7 +44,7 @@ export default {
   },
   data() {
     return {
-      dialogVisible: false
+      errImg: require('@/assets/common/bigUserHeader.png')
     }
   },
   computed: {
@@ -73,7 +59,14 @@ export default {
     toggleSideBar() {
       this.$store.dispatch('app/toggleSideBar')
     },
-    logout() {
+    async logout() {
+      try {
+        await this.$confirm('此操作将永久删除该文件, 是否继续?', '提示', {
+          type: 'warning'
+        })
+      } catch {
+        return
+      }
       this.$store.dispatch('user/logout')
       this.$router.push('/login')
       this.$message.success('退出成功   请重新登录')

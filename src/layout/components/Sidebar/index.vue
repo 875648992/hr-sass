@@ -51,6 +51,12 @@ export default {
     isCollapse() {
       return !this.sidebar.opened
     }
+  },
+  data () {
+    return{}
+  },
+  created () {
+    console.log(this.name = '张三')
   }
 }
 </script>

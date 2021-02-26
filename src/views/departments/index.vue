@@ -1,0 +1,66 @@
+<template>
+  <div class="dashboard-container">
+    <div class="app-container">
+      <el-card class="tree-card">
+        <tree-item :node-data="company" :show="true" />
+        <hr>
+        <!-- 树菜单 -->
+        <el-tree
+          :data="nodeData"
+          default-expand-all
+          :expand-on-click-node="true"
+        >
+          <template v-slot="{ data }">
+            <!-- {{ data }} -->
+            <tree-item :node-data="data" @del="getDepaetList" @add="add" />
+          </template>
+        </el-tree>
+      </el-card>
+      <add-depart :dialog-visible="dialogVisible" :pid="pid" @off="dialogVisible=false" />
+    </div>
+  </div>
+</template>
+
+<script>
+import { getDepart } from '@/api/departments'
+import treeItem from './components/treeItem.vue'
+import { changeTreeData } from '@/utils'
+import AddDepart from './components/addDepart.vue'
+export default {
+  name: 'Depart',
+  components: { treeItem, AddDepart },
+  data() {
+    return {
+      nodeData: [],
+      company: {
+        name: '江苏传智播客',
+        manager: '负责人'
+      },
+      dialogVisible: false,
+      pid: ''
+    }
+  },
+  created() {
+    this.getDepaetList()
+  },
+  methods: {
+    async getDepaetList() {
+      const res = await getDepart()
+      const { depts, companyName } = res
+      this.nodeData = changeTreeData(depts)
+      this.company.name = companyName
+    },
+    add(pid) {
+      this.pid = pid
+      this.dialogVisible = true
+    }
+  }
+}
+</script>
+
+<style>
+.tree-card {
+  padding: 30px 140px;
+  font-size: 14px;
+}
+</style>

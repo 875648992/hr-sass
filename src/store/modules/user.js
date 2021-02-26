@@ -1,5 +1,5 @@
 import { login, getInfo, staff } from '@/api/user'
-import { getToken, setToken, removeToken } from '@/utils/auth'
+import { getToken, setToken, removeToken, setTime } from '@/utils/auth'
 const state = {
   token: getToken(),
   userInfo: {}
@@ -8,6 +8,7 @@ const mutations = {
   setToken(state, payload) {
     state.token = payload
     setToken(payload)
+    setTime(Date.now())
   },
   setUserInfo(state, payload) {
     state.userInfo = payload
@@ -31,6 +32,7 @@ const actions = {
     commit('setUserInfo', {
       ...res,
       staffPhoto: res2.staffPhoto
+      // staffPhoto: '2222'
     })
   },
   logout({ commit }) {

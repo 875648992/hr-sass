@@ -12,3 +12,26 @@ export function delDepart(id) {
     method: 'DELETE'
   })
 }
+
+export function addDepart(data) {
+  return request({
+    url: '/company/department',
+    method: 'post',
+    data
+  })
+}
+
+export function queryDepart(id) {
+  return request({
+    url: '/company/department/' + id,
+    method: 'GET'
+  })
+}
+
+export function updateDepart(data) {
+  return request({
+    url: '/company/department/' + data.id,
+    method: 'put',
+    data
+  })
+}

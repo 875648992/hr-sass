@@ -12,17 +12,17 @@
         >
           <template v-slot="{ data }">
             <!-- {{ data }} -->
-            <tree-item :node-data="data" @del="getDepaetList" @add="add" />
+            <tree-item :node-data="data" @del="getDepaetList" @add="add" @edit="edit" />
           </template>
         </el-tree>
       </el-card>
-      <add-depart :dialog-visible="dialogVisible" :pid="pid" @off="dialogVisible=false" />
+      <add-depart ref="add" :dialog-visible.sync="dialogVisible" :current-info="currentInfo" @applyList="getDepaetList" />
     </div>
   </div>
 </template>
 
 <script>
-import { getDepart } from '@/api/departments'
+import { getDepart, queryDepart } from '@/api/departments'
 import treeItem from './components/treeItem.vue'
 import { changeTreeData } from '@/utils'
 import AddDepart from './components/addDepart.vue'
@@ -37,7 +37,7 @@ export default {
         manager: '负责人'
       },
       dialogVisible: false,
-      pid: ''
+      currentInfo: {}
     }
   },
   created() {
@@ -50,9 +50,15 @@ export default {
       this.nodeData = changeTreeData(depts)
       this.company.name = companyName
     },
-    add(pid) {
-      this.pid = pid
+    add(v) {
+      console.log(v)
+      this.currentInfo = v
       this.dialogVisible = true
+    },
+    async edit(v) {
+      this.currentInfo = await queryDepart(v.id)
+      this.dialogVisible = true
+      this.$refs.add.form = v
     }
   }
 }

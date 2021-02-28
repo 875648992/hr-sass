@@ -19,8 +19,8 @@ import socialRouter from './modules/social'
 export const asyncRoutes = [
   departmentsRouter,
   settingRouter,
-  approvalsRouter,
   employeesRouter,
+  approvalsRouter,
   permissionRouter,
   attendancesRouter,
   salarysRouter,

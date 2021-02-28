@@ -14,7 +14,12 @@ import router from './router'
 import '@/icons' // icon
 import '@/permission' // permission control
 import * as result from '@/directive'
-
+import * as filter from '@/filter'
+Object.keys(filter).forEach(item => {
+  Vue.filter(item, filter[item])
+})
+import component from '@/components'
+Vue.use(component)
 Object.keys(result).forEach(item => {
   Vue.directive(item, result[item])
 })

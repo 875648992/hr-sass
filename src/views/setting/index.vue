@@ -2,12 +2,12 @@
   <div class="dashboard-container">
     <div class="app-container">
       <el-card>
-        <el-tabs v-model="activeName">
-          <el-tab-pane label="角色管理" name="first">
+        <el-tabs v-model="activeName" @tab-click="handleClick">
+          <el-tab-pane label="角色管理" name="Role">
             <el-button size="small" type="primary" class="add" @click="dialogVisible = true">+新增角色</el-button>
             <!-- 表格 -->
             <el-table :data="roleTable" style="width: 100%" border>
-              <el-table-column type="index" prop="date" label="序号" width="180" />
+              <el-table-column type="index" :index="indexMetdos" prop="date" label="序号" width="180" />
               <el-table-column prop="name" label="角色名" width="180" />
               <el-table-column prop="description" label="描述" />
               <el-table-column align="center" prop="address" label="操作">
@@ -18,18 +18,33 @@
                 </template>
               </el-table-column>
             </el-table>
+            <el-row type="flex" justify="end">
+              <el-pagination
+                :current-page="page"
+                :page-size="pageSize"
+                layout="total, prev, pager, next"
+                :total="total"
+                @current-change="handleCurrentChange"
+              />
+            </el-row>
           </el-tab-pane>
-          <el-tab-pane label="公司信息" name="second">公司信息</el-tab-pane>
+          <el-tab-pane label="公司信息" name="company">
+            <el-form label-width="120px" :model="companyForm" style="margin-top:50px">
+              <el-form-item label="公司名称">
+                <el-input v-model="companyForm.name" disabled style="width:400px" />
+              </el-form-item>
+              <el-form-item label="公司地址">
+                <el-input v-model="companyForm.companyAddress" disabled style="width:400px" />
+              </el-form-item>
+              <el-form-item label="邮箱">
+                <el-input v-model="companyForm.mailbox" disabled style="width:400px" />
+              </el-form-item>
+              <el-form-item label="备注">
+                <el-input v-model="companyForm.remarks" type="textarea" :rows="3" disabled style="width:400px" />
+              </el-form-item>
+            </el-form>
+          </el-tab-pane>
         </el-tabs>
-        <el-row type="flex" justify="end">
-          <el-pagination
-            :current-page="page"
-            :page-size="pageSize"
-            layout="total, prev, pager, next"
-            :total="total"
-            @current-change="handleCurrentChange"
-          />
-        </el-row>
       </el-card>
       <el-dialog
         title="提示"
@@ -59,12 +74,12 @@
 </template>
 
 <script>
-import { getAllRole, addRole, updateRole, getCurrentRole, delRole } from '@/api/setting'
+import { getAllRole, addRole, updateRole, getCurrentRole, delRole, getCompany } from '@/api/setting'
 export default {
   name: 'Setting',
   data() {
     return {
-      activeName: 'first',
+      activeName: 'Role',
       roleTable: [],
       page: 1,
       pageSize: 2,
@@ -81,6 +96,12 @@ export default {
         description: [
           { required: true, message: '描述不能为空', trigger: 'blur' }
         ]
+      },
+      companyForm: {
+        name: '',
+        companyAddress: '',
+        mailbox: '',
+        remarks: ''
       }
     }
   },
@@ -138,6 +159,15 @@ export default {
       if (this.roleTable.length === 1) this.page--
       this.$message.success('删除成功')
       this.getRoleList()
+    },
+    indexMetdos(index) {
+      return (this.page - 1) * this.pageSize + index + 1
+    },
+    async handleClick(value) {
+      console.log(value)
+      if (value.name === 'company') {
+        this.companyForm = await getCompany(this.$store.state.user.userInfo.companyId)
+      }
     }
   }
 }
